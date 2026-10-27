@@ -14,9 +14,7 @@ export default async function MemoriesPage() {
 
   const photos = await Promise.all(
     (files ?? [])
-      .filter((file) =>
-        /\.(jpg|jpeg|png|webp|gif)$/i.test(file.name)
-      )
+      .filter((file) => /\.(jpg|jpeg|png|webp|gif)$/i.test(file.name))
       .map(async (file) => {
         const { data } = await supabaseAdmin.storage
           .from("memories")
@@ -30,16 +28,16 @@ export default async function MemoriesPage() {
   );
 
   const rotations = [
-    "rotate-[-4deg]",
-    "rotate-[3deg]",
-    "rotate-[-2deg]",
-    "rotate-[5deg]",
-    "rotate-[-3deg]",
-    "rotate-[2deg]",
+    "rotate-[-1deg]",
+    "rotate-[1deg]",
+    "rotate-[-1deg]",
+    "rotate-[1deg]",
+    "rotate-0",
+    "rotate-[-1deg]",
   ];
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fff0f7] px-5 py-10 text-[#4a3040] md:px-12">
+    <main className="min-h-screen overflow-hidden bg-[#fff0f7] px-4 py-10 text-[#4a3040] md:px-12">
       <nav className="mx-auto mb-16 flex max-w-6xl items-center justify-between">
         <a href="/" className="text-sm font-bold tracking-widest">
           SAAIMAH ♡
@@ -52,7 +50,7 @@ export default async function MemoriesPage() {
         </a>
       </nav>
 
-      <header className="mx-auto mb-16 max-w-4xl text-center">
+      <header className="mx-auto mb-12 max-w-4xl text-center">
         <p className="mb-4 text-xs font-black uppercase tracking-[0.4em] text-pink-500">
           The Birthday Issue · No. 21
         </p>
@@ -62,10 +60,12 @@ export default async function MemoriesPage() {
         </h1>
 
         <p className="mt-6 text-lg italic text-[#806575]">
-          A collection of little moments that mean everything. ♡
+          A little bit of everything, and a whole lot of us. ♡
         </p>
 
-        <div className="mt-8 text-4xl">🎀 ✦ 💗 ✦ 🎀</div>
+        <div className="mt-8 text-4xl">
+          🎀 ✦ 💗 ✦ 🎀
+        </div>
       </header>
 
       {photos.length === 0 ? (
@@ -73,47 +73,65 @@ export default async function MemoriesPage() {
           Our memories are coming soon! ♡
         </p>
       ) : (
-        <section className="mx-auto grid max-w-6xl grid-cols-2 gap-x-3 gap-y-12 py-10 md:grid-cols-3 md:gap-x-10 md:gap-y-20">
-          {photos.map((photo, index) => (
-            <div
-              key={photo.name}
-              className={`relative ${rotations[index % rotations.length]} transition duration-300 hover:z-10 hover:rotate-0 hover:scale-110`}
-            >
-              <div className="absolute -top-3 left-1/2 z-10 h-7 w-16 -translate-x-1/2 rotate-[-8deg] bg-pink-300/70 shadow-sm md:w-24" />
+        <section className="relative mx-auto max-w-6xl py-10">
+          <div className="pointer-events-none absolute left-0 top-0 text-5xl opacity-70 md:text-8xl">
+            ✿
+          </div>
 
-              <a
-                href={photo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block bg-white p-2 pb-8 shadow-[0_12px_35px_rgba(112,38,79,0.18)] md:p-4 md:pb-14"
+          <div className="pointer-events-none absolute right-0 top-10 rotate-12 text-5xl md:text-7xl">
+            💋
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 px-2 sm:gap-5 md:grid-cols-3 md:gap-6">
+            {photos.map((photo, index) => (
+              <div
+                key={photo.name}
+                className={`group relative min-w-0 ${rotations[index % rotations.length]} transition-transform duration-300 hover:z-30 hover:scale-105 hover:rotate-0`}
               >
-                <div className="aspect-[4/5] overflow-hidden bg-pink-100">
+                <a
+                  href={photo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block overflow-hidden border-[5px] border-white bg-white shadow-[0_8px_22px_rgba(112,38,79,0.22)] md:border-[9px]"
+                >
                   <img
                     src={photo.url}
                     alt={`Memory ${index + 1}`}
-                    className="h-full w-full object-cover"
                     loading="lazy"
+                    className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                </div>
+                </a>
 
-                <p className="mt-3 text-center font-serif text-xs italic text-pink-500 md:text-base">
-                  Forever a favourite ♡
-                </p>
-              </a>
+                {index % 6 === 0 && (
+                  <span className="pointer-events-none absolute -bottom-4 -right-3 z-30 rotate-12 text-3xl drop-shadow-sm md:text-5xl">
+                    💗
+                  </span>
+                )}
 
-              {index % 5 === 0 && (
-                <span className="absolute -bottom-6 -right-3 text-3xl md:text-5xl">
-                  💗
-                </span>
-              )}
+                {index % 7 === 2 && (
+                  <span className="pointer-events-none absolute -top-5 left-1/2 z-30 -translate-x-1/2 rotate-[-15deg] bg-pink-300/80 px-6 py-2 shadow-sm">
+                    <span className="text-xs font-black tracking-widest text-pink-800">
+                      XOXO
+                    </span>
+                  </span>
+                )}
 
-              {index % 7 === 0 && (
-                <span className="absolute -left-3 top-1/2 text-2xl md:text-4xl">
-                  ✨
-                </span>
-              )}
-            </div>
-          ))}
+                {index % 9 === 4 && (
+                  <span className="pointer-events-none absolute -left-5 top-1/2 z-30 text-3xl md:text-5xl">
+                    ✨
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="pointer-events-none mt-12 flex items-center justify-center gap-4 text-3xl md:text-5xl">
+            💌
+            <span className="font-serif text-xl italic text-pink-500 md:text-2xl">
+              so many memories, so much love
+            </span>
+            🎀
+          </div>
         </section>
       )}
 
